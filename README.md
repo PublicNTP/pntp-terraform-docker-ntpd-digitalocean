@@ -1,2 +1,2 @@
-# pntp-terraform-docker-ntpd-digitalocean
+# terraform-docker-ntpd-digitalocean
 Terraform script to launch a droplet that hosts NTPd via Docker on DigitalOcean

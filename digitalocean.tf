@@ -31,6 +31,7 @@ resource "digitalocean_droplet" "docker_ntpd" {
     provisioner "remote-exec" {
         inline = [
             "apt-get update",
+            "DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=\"--force-confnew\" upgrade",
             "DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=\"--force-confnew\" dist-upgrade",
             "apt-get -y autoclean",
 
@@ -41,8 +42,13 @@ resource "digitalocean_droplet" "docker_ntpd" {
             "apt update",
             "apt install -y docker-ce",
 
-            # NTPd container
-            "",
+            # Start Docker image from PublicNTP with NTPd
+            "docker run -d --restart unless-stopped --cap-add SYS_RESOURCE --cap-add SYS_TIME -p 123:123/udp publicntp/ntpd:latest -g -n"
+
+            # Add the host to Landscape
+
+            # Reboot the host
+
         ]
 
         connection {
@@ -53,6 +59,4 @@ resource "digitalocean_droplet" "docker_ntpd" {
     }
 }
 
-# Update the host to latest Ubuntu
-
-
+# Register IPv4 and IPv6 addresses with CloudFlare

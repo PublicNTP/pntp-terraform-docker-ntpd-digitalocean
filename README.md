@@ -27,12 +27,10 @@ Generate a DigitalOcean read/write token under the "API" section of the console.
 ```bash
 $ terraform init
 $ terraform apply \
-> 
 > -var 'do_auth_token=abc...xyz' \
 > -var 'do_droplet_name=<hostname>' \
 > -var 'do_droplet_region=<region code>' \
-> -var 'do_droplet_size=<instance code>' 
+> -var 'do_droplet_size=<instance size code>' 
+```
 
-  [When prompted, type "yes" and hit enter]
-
-``` 
+[When prompted, type `yes` and hit enter]

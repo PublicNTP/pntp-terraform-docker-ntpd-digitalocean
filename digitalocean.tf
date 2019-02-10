@@ -7,6 +7,12 @@ variable "do_droplet_region" {}
 
 variable "do_droplet_size" {}
 
+variable "cloudflare_email" {}
+
+variable "cloudflare_auth_token" {}
+
+variable "publicntp_dns_record" {}
+
 # Configure DigitalOcean provider
 
 provider "digitalocean" {
@@ -46,9 +52,6 @@ resource "digitalocean_droplet" "docker_ntpd" {
             "docker run -d --restart unless-stopped --cap-add SYS_RESOURCE --cap-add SYS_TIME -p 123:123/udp publicntp/ntpd:latest -g -n"
 
             # Add the host to Landscape
-
-            # Reboot the host
-
         ]
 
         connection {
@@ -60,3 +63,29 @@ resource "digitalocean_droplet" "docker_ntpd" {
 }
 
 # Register IPv4 and IPv6 addresses with CloudFlare
+provider "cloudflare" {
+    email = "${var.cloudflare_email}"
+    token = "${var.cloudflare_auth_token}"
+}
+
+# Create CloudFlare IPv4 record
+resource "cloudflare_record" "cloudflare_ipv4_record" {
+    domain  = "publicntp.org"
+    name    = "${var.publicntp_dns_record}"
+    type    = "A"
+    value   = "${digitalocean_droplet.docker_ntpd.ipv4_address}"
+    # ttl     = "86400"
+}
+
+# Create CloudFlare IPv6 record
+resource "cloudflare_record" "cloudflare_ipv6_record" {
+    domain  = "publicntp.org"
+    name    = "${var.publicntp_dns_record}"
+    type    = "AAAA"
+    value   = "${digitalocean_droplet.docker_ntpd.ipv6_address}"
+    # ttl     = "86400"
+}
+
+
+
+# Reboot new host to get new kernel

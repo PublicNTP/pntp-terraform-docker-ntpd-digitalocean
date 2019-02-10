@@ -30,7 +30,10 @@ $ terraform apply \
 > -var 'do_auth_token=abc...xyz' \
 > -var 'do_droplet_name=<hostname>' \
 > -var 'do_droplet_region=<region code>' \
-> -var 'do_droplet_size=<instance size code>' 
+> -var 'do_droplet_size=<instance size code>' \
+> -var 'cloudflare_email=<email address for cloudflare account>' \
+> -var 'cloudflare_auth_token=<cloudflare auth token>' \
+> -var 'publicntp_dns_record=<DNS record, e.g. "stratum2-01.yyz01", do NOT include ".publicntp.org">
 ```
 
 [When prompted, type `yes` and hit enter]
